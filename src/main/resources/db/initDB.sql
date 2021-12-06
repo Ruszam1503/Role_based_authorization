@@ -28,8 +28,8 @@ CREATE TABLE roles
 );
 
 CREATE TABLE users_roles (
-                              user_id    BIGSERIAL REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE CASCADE
-    , role_id BIGSERIAL REFERENCES roles (role_id) ON UPDATE CASCADE ON DELETE CASCADE
+                              user_id    int REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE CASCADE
+    , role_id int REFERENCES roles (role_id) ON UPDATE CASCADE ON DELETE CASCADE
     , CONSTRAINT user_roles PRIMARY KEY (user_id, role_id)
 );
 

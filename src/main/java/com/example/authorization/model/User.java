@@ -1,7 +1,9 @@
 package com.example.authorization.model;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -19,11 +21,16 @@ public class User {
     private Long id;
 
     @Column(name = "user_name")
+    @NotNull
     private String name;
+
     @Column(name = "password")
+    @NotNull
     private String password;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
     @Column(name = "enabled")
     private boolean enabled;
 

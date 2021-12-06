@@ -18,16 +18,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImp();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -35,19 +36,22 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/new", "/edit/**").hasAnyAuthority(  "EDITOR","ADMIN")
-                .antMatchers("/delete/**").hasAnyAuthority("ADMIN")
-                .anyRequest().permitAll()
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/", "/index","/login", "/new").permitAll()
+                .antMatchers( "/edit/**").hasAnyAuthority("ROLE_EDITOR", "ROLE_ADMIN")
+                .antMatchers("/delete/**").hasAnyAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll()
+                .formLogin().loginPage("/login")
+                .usernameParameter("email")
+                .permitAll()
                 .and()
                 .logout().permitAll()
                 .and()

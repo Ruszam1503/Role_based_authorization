@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class MyUserDetails implements UserDetails {
 
-    private  final User user;
+    private final User user;
 
     public MyUserDetails(User user) {
         this.user = user;
@@ -22,12 +22,14 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-         Set<Role> roles = user.getRoles();
+        Set<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for(Role role: roles){
+
+        for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
-        return  authorities;
+
+        return authorities;
     }
 
     @Override
@@ -59,4 +61,6 @@ public class MyUserDetails implements UserDetails {
     public boolean isEnabled() {
         return user.isEnabled();
     }
+
 }
+
